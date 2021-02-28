@@ -30,9 +30,12 @@
           <nuxt-link to="/users" class="py-2 px-3 hover:text-gray-900 text-gray-700 rounded transition duration-300">
             Users
           </nuxt-link>
-          <nuxt-link to="/login" class="py-2 px-3 hover:text-gray-900 text-gray-700 rounded transition duration-300">
+          <nuxt-link to="/login" v-if="!hasToken" class="py-2 px-3 bg-green-500 text-white rounded transition duration-300">
             Login
           </nuxt-link>
+          <a @click.prevent="logout" v-else href="#" class="py-2 px-3 bg-purple-600 text-white rounded transition duration-300">
+            Logout
+          </a>
         </div>
 
         <!-- mobile button goes here -->
@@ -58,9 +61,12 @@
       <nuxt-link to="/users" class="block text-center py-2 px-4 text-sm text-gray-700 hover:text-gray-300 hover:bg-purple-600">
         Users
       </nuxt-link>
-      <nuxt-link to="/login" class="block text-center py-2 px-4 text-sm text-gray-700 hover:text-gray-300 hover:bg-purple-600">
+      <nuxt-link to="/login" v-if="!hasToken" class="block text-center py-2 px-4 text-sm text-gray-700 hover:text-gray-300 hover:bg-purple-600">
         Login
       </nuxt-link>
+      <a @click.prevent="logout" v-else href="#" class="block text-center pb-3 py-2 px-4 text-sm text-gray-700 hover:text-gray-300 hover:bg-purple-600">
+        Logout
+      </a>
     </div>
   </nav>
 </template>
@@ -68,6 +74,17 @@
 <script>
 
 export default {
+  computed: {
+    hasToken() {
+      return this.$store.getters.hasToken
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('logout')
+      this.$router.push('login')
+    }
+  },
   mounted() {
     const btn = document.querySelector("button.mobile-menu-button");
     const menu = document.querySelector(".mobile-menu");
